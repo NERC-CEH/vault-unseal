@@ -1,0 +1,11 @@
+{
+  "name": "vault-auto-unseal",
+  "version": "1.0.0",
+  "description": "Check if Hashicorp Vault is sealed and unseal if necessary",
+  "main": "unseal.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.0"
+  }
+}
