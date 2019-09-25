@@ -19,8 +19,9 @@ var config = convict({
 const KEYS_ARR = config.get('vaultKeys').split(',');
 const vaultAddress = config.get('vaultAddr');
 
-function sealStatus() {
-  return axios.get(`${vaultAddress}/v1/sys/seal-status`);
+async function sealStatus() {
+  const response = await axios.get(`${vaultAddress}/v1/sys/seal-status`);
+  return response.data;
 }
 
 function unsealVault(key) {
@@ -29,11 +30,11 @@ function unsealVault(key) {
 
 async function unsealChecker() {
   try {
-    const res = await sealStatus();
-    const { sealed } = res.data;
+    const { sealed } = await sealStatus();
     if (sealed) {
       console.log('Vault is currently sealed');
-      KEYS_ARR.forEach(unsealVault);
+      const unsealPromises = KEYS_ARR.map(unsealVault);
+      await Promise.all(unsealPromises);
     } else {
       console.log('Vault is currently unsealed');
     }
